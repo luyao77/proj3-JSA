@@ -84,32 +84,65 @@
     <label for="attempt">Word:</label>
     <input id="attempt" name="attempt" type="text" width="15"
       autocomplete="off"  autofocus />
-    <input type="submit" name="try" />
   </form>
 </div></div>
 
 <br />
 
-{% if session.matches|length is not equalto 0  %}
 <h2>You found </h2>
 <p id="results">
-  {% for match in session.matches %}
-  {{ match }} 
-  {% endfor %}
+
 </p>
-{% endif %}
-
-
-{% with messages = get_flashed_messages() %}
-  {% if messages %}
-    <!-- Mismatch, already found, etc. "flashed" from Python -->
-    {% for message in messages %}
-      <p class="message">{{ message }}</p>
-    {% endfor %}
-  {% endif %}
-{% endwith %}
 
 
 
+
+<p class="message">{{ message }}</p>
+
+
+<p>
+<p id="response"></p> <!--java will insert here>-->
+
+
+<script>
+
+$("#entry").submit(function(event){
+    event.preventDefault();
+});
+
+$("#attempt").keyup(function(event){
+    var txt = $("#attempt").val();
+    var keycode = event.which;
+    var letter = String.fromCharCode(keycode);
+
+    $.getJSON("/_check", {text : txt},
+        function(data){
+            rslt = data.result.match;
+            input = data.result.matches;
+            jumble = data.result.in_jumble;
+
+            if(rslt == 1){
+              $(".message").html("You found it!"+ "\n" + input);
+            }else if(rslt == 2){
+              $(".message").html("You already found it!"+ input + "\n");
+            }
+            else if(rslt == 3){
+                $(".message").html( input + " isn't in the list of words!"+ "\n");
+              }
+            else if(rslt == 4){
+              $(".message").html(input + " can\'t be made from the letters"+ " "+
+              jumble +
+              "\n");}
+            if(rslt.success){
+                window.location.href = ("/success");
+              }
+          }
+        );
+    });
+
+
+
+
+</script>
  </div> <!-- container -->
 </body> </html>
