@@ -1,11 +1,11 @@
-##Project 3
+## Project 3
 
-##Author:
+## Author:
 Luyao Wang
 
-##Contact Address:
+## Contact Address:
 luyaow@uoregon.edu
 
-##Description:
+## Description:
 
 The project is a practice in Ajax application using JQuery with flask
